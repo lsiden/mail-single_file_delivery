@@ -1,0 +1,26 @@
+# Single File Delivery Method for Mail gem
+
+## Summary
+This gem is a delivery-method plug-in for [mail](https://github.com/mikel/mail)
+that delivers all mail to a single file for testing.
+
+The Mail gem already provides a file delivery-method that appends a copy of each message
+to a file named after each message recipient,
+but I want them to all go to a single file 
+so that I can monitor them from another window with `tail -f my-file`,
+or `cat my-named-pipe` while I hand-test the web interface from a browser.
+
+Of course this is _in addition to_ running automated tests with Rspec and Cucumber.
+At some point in development, I want to actually see the pages and enter my own inputs
+and perhaps display the mail messages in an HTML reader.
+
+## Synopsis
+
+    Mail.defaults do
+      delivery_method SingleFileDelivery => '/tmp/my-file.txt'
+    end
+
+## See Also
+
+* https://github.com/mikel/mail
+* https://github.com/lsiden/mail-store-agent
