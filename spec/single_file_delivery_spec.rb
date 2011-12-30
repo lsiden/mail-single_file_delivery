@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'mail-single_file_delivery'
+require 'mail'
 
 describe Mail::SingleFileDelivery::Agent do
 
@@ -30,31 +31,38 @@ describe Mail::SingleFileDelivery::Agent do
   end
   
   describe "general usage" do
-    single_file = '/tmp/mail-single_file'
+    the_file = '/tmp/mail-single_file'
+
+    before(:all) do
+    end
 
     it "should send an email to a single file" do
       Mail.defaults do
-        delivery_method Mail::SingleFileDelivery, :location => single_file
+        delivery_method Mail::SingleFileDelivery::Agent, :location => the_file
       end
       mail = Mail.deliver do
         from    'roger@moore.com'
         to      'marcel@amont.com'
         subject 'invalid RFC2822'
       end
-      delivery = File.join(Mail.delivery_method.settings[:location])
-      File.read(delivery).should == mail.encoded
+      File.read(the_file).should == mail.encoded
     end
 
     it "should send multiple emails to a single file" do
       Mail.defaults do
-        delivery_method :single_file, :location => single_file
+        delivery_method Mail::SingleFileDelivery::Agent, :location => the_file
       end
       mail = Mail.deliver do
         from    'roger@moore.com'
         to      'marcel@amont.com, bob@me.com'
         subject 'invalid RFC2822'
       end
-      File.read(single_file).should == mail.encoded * 2
+      mail2 = Mail.deliver do
+        from    'roger@moore.com'
+        to      'marcel@amont.com, bob@me.com'
+        subject 'invalid RFC2822'
+      end
+      File.read(the_file).should == mail.encoded + mail2.encoded
     end
   end
 end
