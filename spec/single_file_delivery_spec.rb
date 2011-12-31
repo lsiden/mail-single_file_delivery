@@ -38,7 +38,7 @@ describe Mail::SingleFileDelivery::Agent do
 
     it "should send an email to a single file" do
       Mail.defaults do
-        delivery_method Mail::SingleFileDelivery::Agent, :location => the_file
+        delivery_method Mail::SingleFileDelivery::Agent, :filename => the_file
       end
       mail = Mail.deliver do
         from    'roger@moore.com'
@@ -50,7 +50,7 @@ describe Mail::SingleFileDelivery::Agent do
 
     it "should send multiple emails to a single file" do
       Mail.defaults do
-        delivery_method Mail::SingleFileDelivery::Agent, :location => the_file
+        delivery_method Mail::SingleFileDelivery::Agent, :filename => the_file
       end
       mail = Mail.deliver do
         from    'roger@moore.com'
