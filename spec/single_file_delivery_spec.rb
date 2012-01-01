@@ -18,9 +18,6 @@ describe Mail::SingleFileDelivery::Agent do
     end
   end
   
-  after(:each) do
-  end
-
   it "should respond to #settings() and #settings=()" do
     subject.should respond_to :settings
     subject.should respond_to :settings=
@@ -32,6 +29,7 @@ describe Mail::SingleFileDelivery::Agent do
   
   describe "general usage" do
     the_file = '/tmp/mail-single_file'
+    sep = "\r\n\r\n"
 
     before(:all) do
     end
@@ -45,7 +43,7 @@ describe Mail::SingleFileDelivery::Agent do
         to      'marcel@amont.com'
         subject 'invalid RFC2822'
       end
-      File.read(the_file).should == mail.encoded
+      File.read(the_file).should == mail.encoded + sep
     end
 
     it "should send multiple emails to a single file" do
@@ -62,7 +60,7 @@ describe Mail::SingleFileDelivery::Agent do
         to      'marcel@amont.com, bob@me.com'
         subject 'invalid RFC2822'
       end
-      File.read(the_file).should == mail.encoded + mail2.encoded
+      File.read(the_file).should == mail.encoded + sep + mail2.encoded + sep
     end
   end
 end
